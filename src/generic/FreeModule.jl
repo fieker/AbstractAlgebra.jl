@@ -61,6 +61,10 @@ end
 ###############################################################################
 
 function show(io::IO, M::FreeModule{T}) where T <: Union{RingElement, NCRingElem}
+   if isdefined(M, :other) && haskey(M.other, :show)
+     M.other[:show](io, M)
+     return
+   end
    print(io, "Free module of rank ")
    print(io, rank(M))
    print(io, " over ")
@@ -68,6 +72,10 @@ function show(io::IO, M::FreeModule{T}) where T <: Union{RingElement, NCRingElem
 end
 
 function show(io::IO, M::FreeModule{T}) where T <: FieldElement
+   if isdefined(M, :other) && haskey(M.other, :show)
+     M.other[:show](io, M)
+     return
+   end
    print(io, "Vector space of dimension ")
    print(io, dim(M))
    print(io, " over ")
@@ -142,4 +150,3 @@ function FreeModule(R::NCRing, rank::Int; cached::Bool = true)
    T = elem_type(R)
    return FreeModule{T}(R, rank, cached)
 end
-
